@@ -54,7 +54,7 @@ print(A)
 inputFile = "Coin1.txt"
 if inputFile.endswith(".txt"):
     outputFile = inputFile[:-4]
-    outputFile += "change.txt"
+    outputFile += "Coin1change.txt"
 
 # Attempts to delete the results file if it already exists
 # because when running the program multiple times

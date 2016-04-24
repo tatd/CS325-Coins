@@ -27,7 +27,7 @@ def changegreedy(V, A):
     return C, m
 
 ################################################################
-# dynamic_coins
+# changedp
 # Dynamic algorithm to determine coins needed for change
 # Always optimal, every time.
 # Input: list V of coin values, amount A
@@ -35,7 +35,7 @@ def changegreedy(V, A):
 #   min number of coins to make amount
 ################################################################
 
-def dynamic_coins(V, A):
+def changedp(V, A):
 
     C = []                          # array of min coins to reach change
     for i in range(len(V)):
@@ -64,6 +64,51 @@ def dynamic_coins(V, A):
     return C, m
 
 ################################################################
+# changeslow
+# Divide and Conquer algorithm to determine coins needed for change
+# Input: list of coin denominations, amount of change
+# Output: returns list of coins used
+#         number of coins to make amount
+#
+#           Uses a helper function
+################################################################
+
+
+def changeslow (coinValues, changeAmount):
+
+    coinsUsed = [0]*len(coinValues)               # initializes the return list to 0 of all coin denominations
+    change=[]                                     # store changeAmount in a list so that it is a mutable object
+    change.append(changeAmount)
+    changeSlowHelper(coinValues, change, coinsUsed)         # call helper function
+    return coinsUsed, sum(coinsUsed)
+
+#######################################################################################################
+#
+#   changeSlowHelper (list, list, list)
+#
+#   PARAMETERS: list of coin denominations
+#               1 element list for change amount (list is used because it is a mutable object)
+#               list to store the number of coins used
+#
+#   OUTPUT:     change[0] will be equal to 0
+#               coinsUsed[] will store the quantities of each coin type used
+#                   (for ex. if coinList=[1,5,10] and 7x 10 coins, 3x 5 coins, and 2x 1 coins were used
+#                       coinsUsed would be [2,3,7]  )
+#
+#####################################################@@@@##############################################
+
+
+def changeSlowHelper(coinList, change, coinsUsed):
+    for coin in reversed(coinList):
+        if change[0] <= 0:
+            return coinsUsed
+        elif change[0]-coin >= 0:                               # if change > coin denomination
+            result = change[0]-coin                             # subtract that denomination from the change amount
+            change[0] = result                                  # store value back in list
+            coinsUsed[coinList.index(coin)] += 1                # add 1 to the denomination of coin used
+            changeSlowHelper(coinList, change, coinsUsed)       # recursively call with smaller change amount
+
+################################################################
 # input_output
 # Iterates through functions to find differing results
 # Input: input filename, names of functions
@@ -80,7 +125,11 @@ def dynamic_coins(V, A):
 
 def input_output(inputFile, functions):
     # set up output file name
-    if inputFile.endswith(".txt"):
+    if  inputFile.endswith(".txt"):
+        outputFile = inputFile[:-4]
+        outputFile += "change.txt"
+    else:
+        inputFile += ".txt"
         outputFile = inputFile[:-4]
         outputFile += "change.txt"
 
@@ -105,7 +154,10 @@ def input_output(inputFile, functions):
         if A:
             # remove newline char, convert string to int
             A = A.replace('\n', '')
-            A = int(A)
+            try:
+                A = int(A)
+            except ValueError:
+                pass
         if not A: break
 
         # append V, A pair as tuple
@@ -134,10 +186,11 @@ def input_output(inputFile, functions):
 # main
 
 # inputFilename = "Coin1.txt"
-functions = {  # 'Divide and Conquer': [?, 1],
-    'Greedy': [changegreedy, 1],
-    'Dynamic': [dynamic_coins, 2]}
+functions = {
+    'Divide and Conquer': [changeslow, 1],
+    'Greedy': [changegreedy, 2],
+    'Dynamic': [changedp, 3]}
 
-prompt = input("Please enter the filename: ")       # prompt for user input filename
+prompt = input("Please enter the input filename: ")       # prompt for user input filename
 inputFilename = prompt
 input_output(inputFilename, functions)
