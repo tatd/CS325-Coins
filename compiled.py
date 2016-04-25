@@ -1,4 +1,6 @@
+import timeit
 import os
+
 
 ################################################################
 # changegreedy
@@ -157,10 +159,14 @@ def input_output(inputFile, functions):
     if  inputFile.endswith(".txt"):
         outputFile = inputFile[:-4]
         outputFile += "change.txt"
+        csvFile = inputFile[:-4]
+        csvFile += "change.csv"
     else:
         inputFile += ".txt"
         outputFile = inputFile[:-4]
         outputFile += "change.txt"
+        csvFile = inputFile[:-4]
+        csvFile += "change.csv"
 
     # Attempts to delete the results file if it already exists
     # because when running the program multiple times
@@ -168,6 +174,7 @@ def input_output(inputFile, functions):
     # set of results each time
     try:
         os.remove(outputFile)
+        os.remove(csvFile)
     except OSError:
         pass
 
@@ -195,19 +202,26 @@ def input_output(inputFile, functions):
     for function in sorted(functions.items(), key=lambda e: e[1][1]):
         with open(outputFile, "a") as f:
             f.write("Algorithm " + function[0] + ":\n")
+        with open(csvFile, "a") as f:
+            f.write(function[0] + "\nCoins,RunTime\n")
 
         print(function[0])
 
         for set in sets:
             V = set[0]
             A = set[1]
+            # START TIMER
+            start = timeit.default_timer()                          # set start time
             coins = function[1][0](V, A)
+            runTime = (timeit.default_timer() - start) * 1000000    # calculate run time (in microseconds)
             C = coins[0]
             m = coins[1]
 
+
             with open(outputFile, "a") as f:
                 f.write("{0}\n{1}\n".format(C, m))
-
+            with open(csvFile, "a") as f:
+                f.write("{0},{1},{2}\n".format(A, m, runTime))
 
             print(C)
             print(m)
