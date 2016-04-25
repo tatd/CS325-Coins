@@ -216,7 +216,7 @@ def input_output(inputFile, functions):
 
 # inputFilename = "Coin1.txt"
 functions = {
-    'Divide and Conquer': [changeslow, 1],
+    'Brute Divide and Conquer': [changeslow, 1],
     'Greedy': [changegreedy, 2],
     'Dynamic': [changedp, 3]}
 
