@@ -65,48 +65,77 @@ def changedp(V, A):
 
 ################################################################
 # changeslow
-# Divide and Conquer algorithm to determine coins needed for change
+# This function finds all possible coin combinations using brute force w/ recursion
 # Input: list of coin denominations, amount of change
 # Output: returns list of coins used
 #         number of coins to make amount
 #
-#           Uses a helper function
+#           Uses a helper functions
 ################################################################
 
 
 def changeslow (coinValues, changeAmount):
 
-    coinsUsed = [0]*len(coinValues)               # initializes the return list to 0 of all coin denominations
-    change=[]                                     # store changeAmount in a list so that it is a mutable object
-    change.append(changeAmount)
-    changeSlowHelper(coinValues, change, coinsUsed)         # call helper function
-    return coinsUsed, sum(coinsUsed)
+    ###########################################################################################
+    #   PARAMETERS: coins(list) stores the current working solution, initially empty
+    #               coinList(list) contains the coin denominations
+    #               curCoin(int) variable to help with finding solutions
+    #               total(int) - running total of current solution
+    #               amount(int) - original change amount we are to find
+    #               solutions(list) - a list that stores all valid solutions
+    #
+    #   Once a valid solution is found, it is added to the list of possible solutions
+    ###########################################################################################
+    def changeHelper(coins, coinList, curCoin, total, amount, solutions):
+        # A valid solution, add to solutions list, base case 1
+        if total == amount:
+            result = storeResult(coins, coinList)
+            solutions.append(list(result))
+        # not a valid solution, base case 2
+        if total > amount:
+            return
 
-#######################################################################################################
-#
-#   changeSlowHelper (list, list, list)
-#
-#   PARAMETERS: list of coin denominations
-#               1 element list for change amount (list is used because it is a mutable object)
-#               list to store the number of coins used
-#
-#   OUTPUT:     change[0] will be equal to 0
-#               coinsUsed[] will store the quantities of each coin type used
-#                   (for ex. if coinList=[1,5,10] and 7x 10 coins, 3x 5 coins, and 2x 1 coins were used
-#                       coinsUsed would be [2,3,7]  )
-#
-#####################################################@@@@##############################################
+        for coin in coinList:
+            if coin >= curCoin:
+                # Copy the coins list, then add the current coin.
+                copy = coins[:]
+                copy.append(coin)
+                changeHelper(copy, coinList, coin, total + coin, amount, solutions)
+
+    ############################################################################################
+    #   this function formats the results of the valid solution
+    #   PARAMETERS: coins (list) - individual denominations that make up a valid solution
+    #               coinList (list) - coin denominations
+    #
+    #   RETURNS:    formatted list that has the quantity of the coin stored in the same index as that
+    #               denomination in coinList
+    ###########################################################################################
+    def storeResult(coins, coinList):
+        # diplays the quantity of each type of coin, matching the index of the coin input list
+        coinTally = [0]*len(coinList)
+        for coin in coinList:
+            coinTally[coinList.index(coin)] = coins.count(coin)
+        return coinTally
 
 
-def changeSlowHelper(coinList, change, coinsUsed):
-    for coin in reversed(coinList):
-        if change[0] <= 0:
-            return coinsUsed
-        elif change[0]-coin >= 0:                               # if change > coin denomination
-            result = change[0]-coin                             # subtract that denomination from the change amount
-            change[0] = result                                  # store value back in list
-            coinsUsed[coinList.index(coin)] += 1                # add 1 to the denomination of coin used
-            changeSlowHelper(coinList, change, coinsUsed)       # recursively call with smaller change amount
+    # stores all valid solutions, empty initially
+    listOfSolutions = []
+
+    # empty list to help with initial function call
+    result = []
+
+    # call helper funciton
+    changeHelper(result, coinValues, 0, 0, changeAmount, listOfSolutions)
+
+    # After all solutions found, find the optimal (fewest coins) solution
+    fewestCoins = float("inf")
+    indexOfFewest = -1
+    for solution in listOfSolutions:
+        if (sum(solution) < fewestCoins):
+            fewestCoins = sum(solution)
+            indexOfFewest = listOfSolutions.index(solution)
+
+    return listOfSolutions[indexOfFewest], fewestCoins
 
 ################################################################
 # input_output
