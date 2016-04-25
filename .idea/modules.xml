@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/CS325-Coins.iml" filepath="$PROJECT_DIR$/.idea/CS325-Coins.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../Project 1 - Maximum Subarray Sum/.idea/Project 1.iml" filepath="$PROJECT_DIR$/../../Project 1 - Maximum Subarray Sum/.idea/Project 1.iml" />
     </modules>
   </component>
 </project>
