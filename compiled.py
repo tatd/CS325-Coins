@@ -52,8 +52,9 @@ def changedp(V, A):
     for j in range(len(V)):
         for i in range(1, len(T)):
             if i >= V[j]:       # ensure that the change is not less than the denomination
+                if min(T[i], T[i - V[j]] + 1) == (T[i - V[j]] + 1):
+                    D[i] = j
                 T[i] = min(T[i], T[i - V[j]] + 1)      # current combo or 1 coin of value j + num coins to equal i-j
-                D[i] = j
 
     m = T[A]
 
