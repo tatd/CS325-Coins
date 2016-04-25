@@ -203,7 +203,7 @@ def input_output(inputFile, functions):
         with open(outputFile, "a") as f:
             f.write("Algorithm " + function[0] + ":\n")
         with open(csvFile, "a") as f:
-            f.write(function[0] + "\nCoins,RunTime\n")
+            f.write(function[0] + "\nInput Amount,Coins,RunTime\n")
 
         print(function[0])
 
