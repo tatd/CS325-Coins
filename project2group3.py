@@ -328,14 +328,16 @@ functions = {
     'Greedy': [changegreedy, 2],
     'Dynamic': [changedp, 3]}
 
+'''
 functions2 = {
     'Greedy': [changegreedy, 2],
     'Dynamic': [changedp, 3]}
 '''
-prompt = input("Please enter the input filename: ")       # prompt for user input filename
+
+prompt = raw_input("Please enter the input filename: ")       # prompt for user input filename
 inputFilename = prompt
 input_output(inputFilename, functions)
+
 '''
-
 input_output2("Coin6.txt", functions2)
-
+'''
